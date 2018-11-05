@@ -15,7 +15,7 @@ for i in range(len(colors)):
     r,g,b = colors[i]
     colors[i] = (r/255.,g/255.,b/255.)
 
-plotwidth = 6 
+plotwidth = 5 
 
 def parabola(Ly, F, etas, etap, y):
     return -(F/2)*(y*y - Ly*y)/(etas+etap)
@@ -82,12 +82,12 @@ ax.spines["right"].set_visible(False)
 ax.get_xaxis().tick_bottom()
 ax.get_yaxis().tick_left()
 
-plt.semilogx(wi,relerr[:,0],'o',label=r'$u_x$',color=colors[0])
+plt.semilogx(wi,relerr[:,0],'-o',label=r'$u_x$',color=colors[0])
 plt.xlabel('Weissenberg Number' + '$\ \mathrm{Wi}$')
 plt.ylabel('Relative Error')
-plt.semilogx(wi,relerr[:,1],'o',label=r'$\tau_{xx}$',color=colors[1])
-plt.semilogx(wi,relerr[:,2],'o',label=r'$\tau_{xy}$',color=colors[2])
-plt.legend(loc=0,numpoints=1)
+plt.semilogx(wi,relerr[:,1],'-o',label=r'$\tau_{xx}$',color=colors[1])
+plt.semilogx(wi,relerr[:,2],'-o',label=r'$\tau_{xy}$',color=colors[2])
+plt.legend(loc=0,numpoints=1,frameon=False)
 plt.axis([1e-3,1e3,0.0,0.014])
 plt.savefig('/home/cstewart/thesis/plots/pois_l2_error_wi.pgf', bbox_inches='tight')
 #plt.savefig('pois_l2_error_wi.pdf', bbox_inches='tight')

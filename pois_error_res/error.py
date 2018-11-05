@@ -17,7 +17,6 @@ for i in range(len(colors)):
     r,g,b = colors[i]
     colors[i] = (r/255.,g/255.,b/255.)
 
-plotwidth = 6
 
 def parabola(Ly, F, etas, etap, y):
     return -(F/2)*(y*y - Ly*y)/(etas+etap)
@@ -85,6 +84,7 @@ for j in range(nruns):
     relerr[j,1] = np.sqrt(np.sum(np.power(stress[j][1:-1,0] - stressa[j][1:-1,0],2))/np.sum(np.power(stressa[j][1:-1,0],2)))
     relerr[j,2] = np.sqrt(np.sum(np.power(stress[j][1:-1,1] - stressa[j][1:-1,1],2))/np.sum(np.power(stressa[j][1:-1,1],2)))
 
+plotwidth = 5
 fig,ax = plt.subplots(figsize = (plotwidth,plotwidth*0.75))
 
 ax.spines["top"].set_visible(False)
@@ -92,12 +92,12 @@ ax.spines["right"].set_visible(False)
 ax.get_xaxis().tick_bottom()
 ax.get_yaxis().tick_left()
 
-ax.plot(L,relerr[:,0],'o',label=r'$u_x$',color=colors[0])
-ax.plot(L,relerr[:,1],'o',label=r'$\tau_{xx}$',color=colors[1])
-ax.plot(L,relerr[:,2],'o',label=r'$\tau_{xy}$',color=colors[2])
-ax.legend(loc=0,numpoints=1)
-plt.savefig('/home/cstewart/thesis/plots/pois_error_res.pdf', bbox_inches='tight')
-
-print L
-print F
-print lambdap
+ax.plot(L,relerr[:,0],'-o',label=r'$u_x$',color=colors[0],linewidth=1.5)
+ax.plot(L,relerr[:,1],'-o',label=r'$\tau_{xx}$',color=colors[1],linewidth=1.5)
+ax.plot(L,relerr[:,2],'-o',label=r'$\tau_{xy}$',color=colors[2],linewidth=1.5)
+ax.set_xlabel(r'$L_y\ (\delta x)$')
+ax.set_ylabel('Relative Error')
+ax.legend(loc=0,numpoints=1,frameon=False)
+ax.set_xlim(20,140)
+ax.set_ylim(0,0.014)
+plt.savefig('/home/cstewart/thesis/plots/pois_l2_error_L.pgf', bbox_inches='tight')

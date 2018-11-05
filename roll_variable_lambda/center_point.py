@@ -122,7 +122,7 @@ y2_sim_f = y2_sim_f/norm
 
 y1_sim_f = y1_sim_f/norm
 
-fig,axes = plt.subplots(2,1,figsize=(6,8),sharex=True)
+fig,axes = plt.subplots(2,1,figsize=(6,8))
 ax1 = axes[0]
 ax2 = axes[1]
 
@@ -138,9 +138,9 @@ ax1.get_xaxis().tick_bottom()
 ax1.get_yaxis().tick_left()
 ax1.set_ybound(0.0,1.0)
 ax1.set_ylabel(r'$\tau_{xx}(0,0)/\tau_{xx}^\mathrm{max}$')
-ax1.text(0.14,-0.07,'Smooth')
-ax1.text(0.35,-0.07,'Cusp')
-ax1.text(0.55,-0.07,'Singularity')
+ax1.text(0.17,1.04,'Smooth')
+ax1.text(0.35,1.04,'Cusp')
+ax1.text(0.55,1.04,'Singularity')
 
 ax2.plot(x2_ana, y2_ana,color=colors[0], label='Analytical', linewidth=2)
 ax2.plot(x2_sim, y2_sim, '^', color=colors[0], label='Simulated')
@@ -157,11 +157,11 @@ ax2.set_ylabel(r'$\tau_{yy}(0,0)/\tau_{xx}^\mathrm{max}$')
 class AnyObjectHandler(HandlerBase):
    def create_artists(self, legend, orig_handle,
                       x0, y0, width, height, fontsize, trans):
-       l1 = plt.Line2D([x0+8.,x0+8.], [0.7*height,0.7*height],
+       l1 = plt.Line2D([x0+4.,x0+4.], [0.9*height,0.9*height],
                        linestyle=orig_handle[1], color=orig_handle[0], marker='o')
-       l2 = plt.Line2D([x0,y0+width], [0.0*height,0.0*height],
+       l2 = plt.Line2D([x0,x0+width], [0.0*height,0.0*height],
                        linestyle=orig_handle[1], color=orig_handle[0], linewidth=2)
-       l3 = plt.Line2D([x0+20.,x0+20.], [0.7*height,0.7*height],
+       l3 = plt.Line2D([x0+16.,x0+16.], [0.9*height,0.9*height],
                        linestyle=orig_handle[1], color=orig_handle[0], marker='^')
        return [l1, l2, l3]
 
