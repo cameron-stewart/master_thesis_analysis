@@ -1,7 +1,9 @@
+import math
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from scipy.signal import argrelextrema
 mpl.rcParams['font.family'] = 'sans-serif'
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['pgf.rcfonts'] = False
@@ -19,28 +21,27 @@ for i in range(len(colors)):
 plotwidth = 6 
 leng = 10000
 betas = np.array([1,3,5,7,9])
+betas = np.array([9,7,5,3,1])
 nruns = betas.size
 
-tmax = np.zeros(nruns)
+t1 = np.zeros(nruns)
 vmax = np.zeros(nruns)
-vel = np.zeros((leng,nruns))
+t2 = np.zeros(nruns)
+v2 = np.zeros(nruns)
+vel = np.load('numpy.save.npy')
 x = np.arange(leng)
 
-j=0
-for beta in betas:
-    with open('vel' + str(beta) + '.dat', 'rb') as f:
-        reader = csv.reader(f)
-        i=0
-        for row in reader:
-            for col in row:
-                if col != row[-1]:
-                    if i < leng:
-                        vel[i,j] = float(np.array(row)[i])
-                    i+=1
-    j +=1
-    f.close()
-
 vel = vel/vel[-1,-1]
+vel_norm = vel - 1.0
+
+for i in range(nruns):
+    vmax[i] = np.amax(vel[:,i])
+    t1[i] = np.argmax(vel[:,i])
+    for t in range(len(vel[:,i])):
+        if ((vel_norm[t,i] < vel_norm[int(t1[i]),i]/math.e) & ( t > int(t1[i]))):
+            t2[i] = t- t1[i]
+            v2[i] = vel[t,i]
+            break 
 
 plt.figure(figsize = (plotwidth,plotwidth*0.75))
 ax = plt.subplot(111)
@@ -53,18 +54,25 @@ ax.get_yaxis().tick_left()
 
 for i in range(nruns):
     plt.plot(x,vel[:,i],color=colors[i],label=(r'$\beta =\ $'+"0." + str(betas[i])), linewidth=2.0)
+    plt.plot(t1,vmax,'d',color='k', markersize=4.0)
+    plt.plot(t2+t1,v2,'d',color=colors[5], markersize=4.0)
 
 plt.legend(frameon=False)
 plt.xlabel("Time Steps" + r'$\ (\delta t)$')
 plt.ylabel('Relative Velocity' + r'\ $u_x/u_x^\mathrm{ss}$')
+
+ax2=plt.axes([.40,.6,.2,.2])
+ax2.plot(betas,t1,'d-',color='k', markersize=4.0)
+ax2.set_ylabel(r'$t_1 (\delta t)$', color='k')
+#ax2.set_yticks([300,500,700])
+ax2.tick_params('y',colors='k')
+ax2.set_xlabel(r'$\beta$')
+
+a=ax2.twinx()
+a.plot(betas,t2, '-d', color=colors[5], markersize=4.0)
+a.set_yticks([800,1600,2400])
+a.tick_params('y', colors=colors[5])
+a.set_ylabel(r'$t_2 (\delta t)$', color=colors[5])
+
 plt.savefig("/home/cstewart/thesis/plots/overshoot_beta.pgf", bbox_inches="tight")
-
-for i in range(nruns):
-    vmax[i] = np.amax(vel[:,i])
-    tmax[i] = np.argmax(vel[:,i])
-
-plt.figure(figsize = (plotwidth,plotwidth*0.75))
-#plt.plot(betas/10.,vmax, 'o')
-#plt.axis([0,1,1,1.8])
-#plt.plot(betas/10.,tmax, 'o')
-#plt.axis([0,1,300,500])
+#plt.savefig("overshoot_beta.pdf", bbox_inches='tight')
