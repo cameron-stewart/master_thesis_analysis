@@ -82,8 +82,8 @@ wi = lambdap*1e-3/L
 fig, ax1 = plt.subplots(figsize = (plotwidth,plotwidth*0.75))
 alpha = alpha*1e5
 ax1.plot(lambdap,alpha,'o-', label='Simulated',color=colors[0])
-ax1.set_xlabel(r'$\lambda_p\ (\delta t)$')
-ax1.set_ylabel(r'$\alpha\times 10^5\ (1/\delta t)$', color=colors[0])
+ax1.set_xlabel(r'$\lambda_p/\delta t$')
+ax1.set_ylabel(r'$\alpha\times 10^5/(1/\delta t)$', color=colors[0])
 ax1.set_xbound(5000,45000)
 ax1.set_xticks(np.arange(10000,45001,10000))
 ax1.tick_params('y',colors=colors[0])

@@ -138,7 +138,7 @@ for i in range(len(plots)):
 
 fig.text(0.515,0.04, r'$y/L$',ha='center')
 fig.text(0.515,0.92,'Incompressible',ha='center',fontsize=22)
-fig.text(0.02,0.5,r'$\tau_{xx}(0,y)\ (\mathrm{AU})$', va='center', rotation='vertical')
-fig.text(1.0,0.5,r'$\tau_{yy}(0,y)\ (\mathrm{AU})$', va='center', rotation=-90)
+fig.text(0.02,0.5,r'$\tau_{xx}(0,y)$', va='center', rotation='vertical')
+fig.text(1.0,0.5,r'$\tau_{yy}(0,y)$', va='center', rotation=-90)
 
 plt.savefig('/home/cstewart/thesis/plots/roll_stress_inc.pgf', bbox_inches='tight')

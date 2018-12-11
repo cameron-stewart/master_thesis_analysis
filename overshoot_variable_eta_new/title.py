@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
+from scipy.signal import argrelextrema
 mpl.rcParams['font.family'] = 'sans-serif'
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['pgf.rcfonts'] = False
@@ -20,18 +20,18 @@ for i in range(len(colors)):
 
 plotwidth = 6 
 leng = 10000
-lambdas = np.array([1000,3000,5000,7000,9000])
-nruns = lambdas.size
+betas = np.array([1,3,5,7,9])
+betas = np.array([9,7,5,3,1])
+nruns = betas.size
 
 t1 = np.zeros(nruns)
 vmax = np.zeros(nruns)
 t2 = np.zeros(nruns)
 v2 = np.zeros(nruns)
-#vel = np.zeros((leng,nruns))
-vel = np.load("numpy.save.npy")
-x = np.arange(0,leng)
+vel = np.load('numpy.save.npy')
+x = np.arange(leng)
 
-vel = vel/vel[-1,0]
+vel = vel/vel[-1,-1]
 vel_norm = vel - 1.0
 
 for i in range(nruns):
@@ -43,9 +43,6 @@ for i in range(nruns):
             v2[i] = vel[t,i]
             break 
 
-
-
-
 plt.figure(figsize = (plotwidth,plotwidth*0.75))
 ax = plt.subplot(111)
 ax.spines["top"].set_visible(False)
@@ -55,41 +52,23 @@ ax.spines["left"].set_visible(False)
 ax.get_xaxis().tick_bottom()
 ax.get_yaxis().tick_left()
 
+plt.tick_params(
+    axis='y',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    left=False,      # ticks along the bottom edge are off
+    top=False,         # ticks along the top edge are off
+    labelleft=False) # labels along the bottom edge are off
+
+plt.tick_params(
+    axis='x',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    bottom=False,      # ticks along the bottom edge are off
+    top=False,         # ticks along the top edge are off
+    labelbottom=False) # labels along the bottom edge are off
 for i in range(nruns):
-    plt.plot(vel[:,i],color=colors[i],label=(r'$\lambda_p =\ $' + str(lambdas[i])),linewidth=2.0)
-    plt.plot(t1,vmax,'d',color='k', markersize=4.0)
-    plt.plot(t2+t1,v2,'d',color=colors[5], markersize=4.0)
-
-plt.ylim(0.7,1.4)
-plt.legend(frameon=False)
-plt.xlabel("Time Steps" + r'$/\delta t$')
-plt.ylabel('Relative Velocity' + r'$\ u_x/u_x^\mathrm{ss}$')
-
-ax2=plt.axes([.42,.2,.2,.2])
-ax2.plot(lambdas,t1,'d-',color='k', markersize=4.0)
-ax2.set_ylabel(r'$t_1/\delta t$', color='k')
-ax2.set_yticks([300,500,700])
-ax2.tick_params('y',colors='k')
-ax2.set_xlabel(r'$\lambda_p/\delta t$')
-
-a=ax2.twinx()
-a.plot(lambdas,t2, '-d', color=colors[5], markersize=4.0)
-a.set_yticks([1500,4500,7500])
-a.tick_params('y', colors=colors[5])
-a.set_ylabel(r'$t_2/\delta t$', color=colors[5])
-
-
-plt.savefig("/home/cstewart/thesis/plots/overshoot_lambda.pgf", bbox_inches="tight")
-#plt.savefig("overshoot_lambda.pdf", bbox_inches="tight")
+    plt.plot(x,vel[:,i],color=colors[i],label=(r'$\beta =\ $'+"0." + str(betas[i])), linewidth=2.0)
 
 
 
-
-
-
-"""
-plt.plot(betas/10.,vmax, 'o')
-plt.axis([0,1,1,1.8])
-plt.plot(betas/10.,tmax, 'o')
-plt.axis([0,1,300,500])
-"""
+plt.savefig("/home/cstewart/thesis/inkscape/title.pdf", bbox_inches="tight")
+#plt.savefig("overshoot_beta.pdf", bbox_inches='tight')
